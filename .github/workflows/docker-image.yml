@@ -1,5 +1,8 @@
 name: Build & Publish Docker Image
 
+permissions:
+  contents: read     # Standard-Erlaubnis für Quellcode
+  packages: write    # explizit Erlaubnis, um in GHCR zu pushen
 on:
   push:
     branches: [ main ]
