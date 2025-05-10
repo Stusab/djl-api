@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Pflanzen-Toxizität prüfen</title>
+</head>
+<body>
+  <h1>Toxische vs. ungiftige Pflanzen</h1>
+  <input type="file" id="fileInput" accept="image/*">
+  <button id="analyzeBtn">Analysieren</button>
+  <pre id="result"></pre>
+
+  <script>
+    document.getElementById('analyzeBtn').onclick = async () => {
+      const file = document.getElementById('fileInput').files[0];
+      if (!file) return alert('Bitte ein Bild auswählen.');
+      const form = new FormData();
+      form.append('image', file);
+      const res = await fetch('/api/analyze', { method: 'POST', body: form });
+      document.getElementById('result').textContent = JSON.stringify(await res.json(), null, 2);
+    };
+  </script>
+</body>
+</html>

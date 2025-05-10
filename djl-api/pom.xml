@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.4.5</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>ch.zhaw.fakereader</groupId>
+  <artifactId>djl-api</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>djl-api</name>
+
+  <properties>
+    <java.version>17</java.version>
+    <!-- Version passend zu djl-model -->
+    <djl.version>0.28.0</djl.version>
+  </properties>
+
+  <!-- Import des DJL-BOM, damit alle DJL-Artefakte dieselbe Version nutzen -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>ai.djl</groupId>
+        <artifactId>bom</artifactId>
+        <version>${djl.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- Spring Boot Web -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- DJL Core API -->
+    <dependency>
+      <groupId>ai.djl</groupId>
+      <artifactId>api</artifactId>
+    </dependency>
+
+    <!-- MXNet Engine (lädt die .params/.json-Modelle) -->
+    <dependency>
+      <groupId>ai.djl.mxnet</groupId>
+      <artifactId>mxnet-engine</artifactId>
+    </dependency>
+
+    <!-- Native MXNet-Bibliotheken für Windows → aus BOM übernommen -->
+    <dependency>
+      <groupId>ai.djl.mxnet</groupId>
+      <artifactId>mxnet-native-mkl</artifactId>
+      <classifier>win-x86_64</classifier>
+      <version>1.9.1</version>
+      <scope>runtime</scope>
+    </dependency>
+        <dependency>
+      <groupId>ch.zhaw.fakereader</groupId>
+      <artifactId>djl-model</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+        <groupId>ai.djl</groupId>
+        <artifactId>basicdataset</artifactId>
+        <version>0.28.0</version>
+    </dependency>
+    <dependency>
+        <groupId>ai.djl</groupId>
+        <artifactId>model-zoo</artifactId>
+        <version>${djl.version}</version>
+    </dependency>
+
+
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Java-17-Compiler -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <!-- Spring Boot Plugin -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
