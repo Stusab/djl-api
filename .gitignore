@@ -1,0 +1,4 @@
+# Maven build artifacts
+**/target/
+*.jar
+!djl-api/target/djl-api-*-SNAPSHOT.jar  # falls du das API-Jar versioniert mitchecken willst, sonst weglassen
