@@ -1,16 +1,13 @@
 name: Build & Publish Docker Image
 
-permissions:
-  contents: read     # Standard-Erlaubnis für Quellcode
-  packages: write    # explizit Erlaubnis, um in GHCR zu pushen
 on:
   push:
     branches: [ main ]
-    
+
+# ✏️ Hier die wichtigen Permissions
 permissions:
   contents: read       # damit checkout weiterhin funktioniert
   packages: write      # damit GHCR pushen darf
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
