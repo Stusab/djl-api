@@ -2,3 +2,8 @@
 **/target/
 *.jar
 !djl-api/target/djl-api-*-SNAPSHOT.jar  # falls du das API-Jar versioniert mitchecken willst, sonst weglassen
+# ignore everything in these folders
+djl-model/target/
+djl-api/target/
+**/*.jar
+Dockerfile
