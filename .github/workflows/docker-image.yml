@@ -1,38 +1,34 @@
 name: Build & Publish Docker Image
-
-# Trigger bei jedem Push auf main
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
-# Erforderliche Rechte für actions/token
+# 1) Erlaube Write-Zugriff auf Packages
 permissions:
-  contents: read    # für actions/checkout
-  packages: write   # für GHCR push
+  contents: read
+  packages: write
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) Code auschecken
+      # 2) Repo auschecken
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2) Login beim GitHub Container Registry
+      # 3) Login ins GHCR mit GITHUB_TOKEN
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3) Build & Push
+      # 4) Image bauen und pushen
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
-          context: . 
-          file: Dockerfile
+          context: .
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/djl-api:latest
