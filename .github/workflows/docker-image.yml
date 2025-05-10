@@ -1,16 +1,15 @@
-name: Log in to GitHub Container Registry
+name: Build & Publish Docker Image
 
-
-# Triggert bei jedem Push auf main
+# Trigger bei jedem Push auf main
 on:
   push:
     branches:
       - main
 
-# Erforderliche Workflow-Permissions
+# Erforderliche Rechte für actions/token
 permissions:
-  contents: read    # Checkout
-  packages: write   # GHCR push
+  contents: read    # für actions/checkout
+  packages: write   # für GHCR push
 
 jobs:
   build-and-push:
@@ -23,17 +22,17 @@ jobs:
 
       # 2) Login beim GitHub Container Registry
       - name: Log in to GitHub Container Registry
-  uses: docker/login-action@v2
-  with:
-    registry: ghcr.io
-    username: ${{ github.actor }}
-    password: ${{ secrets.GHCR_TOKEN }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       # 3) Build & Push
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: . 
           file: Dockerfile
           push: true
-          tags: ghcr.io/stusab/djl-api:latest
+          tags: ghcr.io/${{ github.repository_owner }}/djl-api:latest
