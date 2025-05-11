@@ -106,7 +106,7 @@ Weitere Dateien:
 - Start des Servers mit sichtbarem Modell-Load
 - Curl- oder Postman-Test
 - Web-UI-Demo
-- Optional: Azure Deployment
+- Optional: Stremlit Deployment
 - Erklärung der Ordnerstruktur und Highlights
 
 ---
@@ -127,7 +127,7 @@ Weitere Dateien:
 
 ## 👤 Autor
 
-**Name**: [Dein Name]  
+**Name**: Sabrina Studer
 **Modul**: Model Deployment & Maintenance  
 **Studiengang**: Wirtschaftsinformatik  
-**Semester**: [z. B. FS2025]  
+**Semester**: FS2025
