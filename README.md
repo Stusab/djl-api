@@ -22,7 +22,7 @@ Trainingsablauf:
 - Evaluate.java: Prüft Genauigkeit und erzeugt eine Confusion-Matrix für das Validierungsset
 
 Trainingsdatenstruktur:
-
+```
 dataset/
 ├── train/
 │   ├── toxic/
@@ -30,6 +30,7 @@ dataset/
 ├── valid/
     ├── toxic/
     └── nontoxic/
+```
 
 Trainiert wurde mit EasyTrain.fit, 10 Epochen, Learning Rate 0.001, Batch-Größe 32.  
 Das Modell wird automatisch beim Start des Backends geladen.
@@ -88,18 +89,19 @@ Das Backend lädt beim Start automatisch das Modell aus /resources/models/plantd
 
 ## 🧾 Projektstruktur
 
+```
 Projekt2/
 ├── djl-api/
 │   ├── src/
-│   │   ├── main/
-│   │   │   ├── java/
-│   │   │   │   └── ch/zhaw/fakereader/api/
-│   │   │   │       ├── DjlApiApplication.java
-│   │   │   │       ├── ModelController.java
-│   │   │   │       └── ModelService.java
-│   │   │   └── resources/
-│   │   │       └── static/
-│   │   │           └── index.html
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── ch/zhaw/fakereader/api/
+│   │       │       ├── DjlApiApplication.java
+│   │       │       ├── ModelController.java
+│   │       │       └── ModelService.java
+│   │       └── resources/
+│   │           └── static/
+│   │               └── index.html
 │   └── pom.xml
 ├── djl-model/
 │   ├── dataset/
@@ -114,6 +116,8 @@ Projekt2/
 ├── Dockerfile
 ├── README.md
 └── streamlit_app.py (nicht verwendet)
+```
+
 
 
 ## 🎬 Screencast-Inhalt (5 Minuten)
