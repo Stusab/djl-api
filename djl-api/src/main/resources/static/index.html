@@ -2,57 +2,51 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Pflanzen-Toxizität prüfen</title>
+  <title>Pflanzen-Toxizität analysieren</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f4f8;
-      color: #333;
+      background: #edf2f7;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
     }
 
     h1 {
-      margin-bottom: 20px;
       color: #2c3e50;
+      margin-bottom: 30px;
     }
 
-    #fileInput {
+    input[type="file"] {
       padding: 10px;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
     }
 
-    #analyzeBtn {
-      background-color: #27ae60;
+    button {
+      background-color: #2ecc71;
       color: white;
       border: none;
       padding: 10px 20px;
       font-size: 16px;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
     }
 
-    #analyzeBtn:hover {
-      background-color: #1e8449;
+    button:hover {
+      background-color: #27ae60;
     }
 
     #result {
-      background: #ecf0f1;
-      border: 1px solid #bdc3c7;
+      margin-top: 30px;
       padding: 15px;
-      margin-top: 20px;
-      width: 90%;
+      background-color: #ecf0f1;
+      border: 1px solid #bdc3c7;
+      border-radius: 6px;
       max-width: 600px;
       white-space: pre-wrap;
-      border-radius: 8px;
     }
   </style>
 </head>
@@ -60,21 +54,30 @@
   <h1>🌿 Pflanzen-Toxizität analysieren</h1>
   <input type="file" id="fileInput" accept="image/*">
   <button id="analyzeBtn">Analysieren</button>
-  <pre id="result">Ergebnis wird hier angezeigt...</pre>
+  <pre id="result">📂 Ergebnis erscheint hier nach dem Hochladen...</pre>
 
   <script>
     document.getElementById('analyzeBtn').onclick = async () => {
       const file = document.getElementById('fileInput').files[0];
       if (!file) return alert('Bitte ein Bild auswählen.');
+
       const form = new FormData();
       form.append('image', file);
+
       const res = await fetch('/api/analyze', { method: 'POST', body: form });
       const resultElem = document.getElementById('result');
-      if (res.ok) {
+
+      try {
         const data = await res.json();
-        resultElem.textContent = `🌱 Ergebnis: ${data.className}\n📊 Wahrscheinlichkeit: ${(data.probability * 100).toFixed(2)}%`;
-      } else {
-        resultElem.textContent = '❌ Fehler beim Analysieren. Bitte erneut versuchen.';
+        if (data.className && data.probability !== undefined) {
+          resultElem.textContent =
+            `🌿 Ergebnis: ${data.className}\n📊 Wahrscheinlichkeit: ${(data.probability * 100).toFixed(2)}%`;
+        } else {
+          resultElem.textContent =
+            `⚠️ Keine gültige Antwort erhalten.\nAntwort:\n${JSON.stringify(data, null, 2)}`;
+        }
+      } catch (err) {
+        resultElem.textContent = `❌ Fehler beim Verarbeiten der Serverantwort.`;
       }
     };
   </script>
