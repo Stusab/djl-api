@@ -1,15 +1,17 @@
 # 🌿 DJL API: Pflanzenerkennung (Toxic vs. Non-Toxic)
 
-Dieses Projekt wurde im Rahmen des Moduls **Model Deployment & Maintenance** erstellt und nutzt die **Deep Java Library (DJL)** in Kombination mit einem **Spring Boot Webservice**, um Pflanzenbilder als **giftig** oder **ungiftig** zu klassifizieren.
+Dieses Projekt wurde im Rahmen des Moduls **Model Deployment & Maintenance** erstellt. Es nutzt die **Deep Java Library (DJL)** in Kombination mit einem **Spring Boot Webservice**, um Pflanzenbilder als **giftig** oder **ungiftig** zu klassifizieren.
+
+---
 
 ## 📦 Tech-Stack
 
-- Java / Spring Boot Webservice
-- Deep Java Library (DJL) mit MXNet-Engine
+- Java / Spring Boot
+- Deep Java Library (DJL) mit MXNet Engine
 - Docker für Containerisierung
-- HTML/JS für Web-Oberfläche
-- Curl/Postman für API-Tests
-- (Optional) Azure App Service für Deployment
+- HTML/JavaScript für Web-Oberfläche
+- Curl / Postman für API-Tests
+- (Optional) Azure Web App Deployment
 
 ---
 
@@ -25,86 +27,107 @@ Ein vortrainiertes Deep-Learning-Modell wird in eine REST-API eingebettet. Nutze
 - **Bibliothek**: Deep Java Library (DJL)
 - **Engine**: MXNet
 - **Trainingsdaten**: Vorgefertigter, lokal gespeicherter Datensatz mit ca. 1000 Bildern je Klasse
-- **Training**: Lokal durchgeführt, Modell im Projekt eingebettet unter `src/main/resources/models/plantdetector/`
-- **Einsatz**: Modell wird beim Start des Webservice geladen
+- **Training**: Lokal durchgeführt, Modell im Projekt gespeichert unter:  
+  src/main/resources/models/plantdetector/
+- **Einsatz**: Modell wird beim Start des Webservices geladen
 
 ---
 
-## 🧪 REST API
+## 🔗 REST API
 
-### POST `/api/analyze`
+**POST /api/analyze**
 
 - **Beschreibung**: Klassifiziert ein übermitteltes Bild
-- **Content-Type**: `multipart/form-data`
-- **Form-Feld**: `image`
-- **Antwortformat** (Beispiel):
+- **Content-Type**: multipart/form-data  
+- **Form-Feld**: image  
+- **Antwortformat (Beispiel)**:  
+  { "className": "toxic", "probability": 0.9458 }
 
-```json
-{
-  "className": "toxic",
-  "probability": 0.9458
-}
-Beispielaufruf (Curl)
-bash
-Kopieren
-Bearbeiten
-curl -X POST http://localhost:8080/api/analyze \
-  -H "Content-Type: multipart/form-data" \
-  -F "image=@/pfad/zum/bild.jpg"
-💻 Web UI
-Eine einfache HTML/JavaScript-Seite unter src/main/resources/static/index.html erlaubt den Upload von Bildern über den Browser. Die Klassifikation wird visuell angezeigt.
+**Beispielaufruf (Curl)**:  
+curl -X POST http://localhost:8080/api/analyze  
+-H "Content-Type: multipart/form-data"  
+-F "image=@/pfad/zum/bild.jpg"
 
-🐳 Docker Deployment
-Dockerfile
+---
+
+## 💻 Web UI
+
+Eine einfache HTML/JavaScript-Seite unter:  
+src/main/resources/static/index.html  
+ermöglicht den Upload von Bildern über den Browser. Die Klassifikation wird direkt auf der Seite angezeigt.
+
+---
+
+## 🐳 Docker Deployment
+
+**Dockerfile**  
 Ein lauffähiger Dockerfile ist enthalten. So kann der Service gestartet werden:
 
-bash
-Kopieren
-Bearbeiten
-# Image bauen
+Image bauen:  
 docker build -t djl-api .
 
-# Container starten
+Container starten:  
 docker run -p 8080:8080 djl-api
-Optional: Docker Compose
-Für eine erweiterbare Umgebung kann docker-compose.yml hinzugefügt werden.
 
-☁️ Azure Deployment
-(Optional) Das Projekt kann auf Azure Web App deployed werden. Der Screencast dokumentiert das Deployment, inklusive Logs und API-Test.
+**Optional: Docker Compose**  
+Falls mehrere Container benötigt werden, kann eine docker-compose.yml ergänzt werden.
 
-🧾 Projektstruktur
-plaintext
-Kopieren
-Bearbeiten
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com.example.djlapi/     ← Spring Boot Backend mit DJL
-│   │   ├── resources/
-│   │   │   ├── static/index.html       ← Web UI
-│   │   │   └── models/plantdetector/   ← Trainiertes Modell
-├── Dockerfile                          ← Containerisierung
-├── README.md                           ← Projektdokumentation
-├── pom.xml                             ← Maven Build-Datei
-🎬 Screencast-Inhalt
-Start des Spring Boot Servers
+---
 
-Modell wird geladen (Konsole oder Logausgabe)
+## ☁️ Azure Deployment (Optional)
 
-API-Test mit Postman oder Curl
+Das Projekt kann auf Azure Web App deployed werden.  
+Der Screencast dokumentiert:
+- Start der App mit Modell-Laden
+- Test via Postman oder UI
+- Screenshot oder Video der Azure-Instanz
 
-Bildklassifikation über Web UI
+---
 
-Optional: Azure Deployment + Beweis
+## 🧾 Projektstruktur
 
-Erläuterung des Codes (kurz, auf rotem Faden aufbauend)
+src/  
+├── main/  
+│   ├── java/  
+│   │   └── com.example.djlapi/  ← Spring Boot Backend mit DJL  
+│   ├── resources/  
+│   │   ├── static/index.html    ← Web UI  
+│   │   └── models/plantdetector/ ← Trainiertes Modell  
 
-✅ Bewertungskriterien (Selbstcheck)
-Kriterium	Erfüllt
-Komplexes Modell/Dataset	✅
-Eigenständige Erarbeitung	✅
-Backend mit DJL	✅
-UI vorhanden + Funktionalität	✅
-Deployment lokal / Azure	✅
-Docker / ggf. Docker Compose	✅
-Screencast mit rotem Faden	✅
+Weitere Dateien:  
+- Dockerfile  
+- pom.xml  
+- README.md
+
+---
+
+## 🎬 Screencast-Inhalt
+
+- Start des Servers mit sichtbarem Modell-Load
+- Curl- oder Postman-Test
+- Web-UI-Demo
+- Optional: Azure Deployment
+- Erklärung der Ordnerstruktur und Highlights
+
+---
+
+## ✅ Bewertungskriterien (Selbstcheck)
+
+| Kriterium                            | Erfüllt |
+|-------------------------------------|---------|
+| Komplexes Modell & Dataset          | ✅       |
+| Eigenständige Umsetzung             | ✅       |
+| Backend mit DJL                     | ✅       |
+| UI mit Funktion                     | ✅       |
+| Deployment lokal / Azure            | ✅       |
+| Docker (evtl. Compose)              | ✅       |
+| Dokumentation & Screencast          | ✅       |
+
+---
+
+## 👤 Autor
+
+**Name**: [Dein Name]  
+**Modul**: Model Deployment & Maintenance  
+**Studiengang**: Wirtschaftsinformatik  
+**Semester**: [z. B. FS2025]  
