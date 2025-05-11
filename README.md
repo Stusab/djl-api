@@ -1,6 +1,7 @@
 # 🌿 DJL API: Pflanzenerkennung (Toxic vs. Non-Toxic)
 
 Dieses Projekt wurde im Rahmen des Moduls **Model Deployment & Maintenance** erstellt. Es nutzt die **Deep Java Library (DJL)** in Kombination mit einem **Spring Boot Webservice**, um Pflanzenbilder als **giftig** oder **ungiftig** zu klassifizieren.
+Diese Projekt unterscheidet sich von meinem Projekt 1, da im ersten Projekt es um Heilpflanzen ging und ihre Wahrscheinlichkeit bei Krankheiten zu helfen, hier wir klassifiziert ob die Pflanze giftig ist oder nicht.
 
 ---
 
