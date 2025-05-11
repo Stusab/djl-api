@@ -1,6 +1,6 @@
 import streamlit as st
 import requests
-API_URL = https://djl-api.onrender.com
+API_URL = "https://djl-api.onrender.com"
 
 # Seite konfigurieren
 st.set_page_config(
