@@ -44,10 +44,8 @@ Ein vortrainiertes Deep-Learning-Modell wird in eine REST-API eingebettet. Nutze
 - **Antwortformat (Beispiel)**:  
   { "className": "toxic", "probability": 0.9458 }
 
-**Beispielaufruf (Curl)**:  
-curl -X POST http://localhost:8080/api/analyze  
--H "Content-Type: multipart/form-data"  
--F "image=@/pfad/zum/bild.jpg"
+https://djl-api.onrender.com/  
+
 
 ---
 
