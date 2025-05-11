@@ -91,22 +91,30 @@ Das Backend lädt beim Start automatisch das Modell aus /resources/models/plantd
 Projekt2/
 ├── djl-api/
 │   ├── src/
-│   │   ├── main/java/ch/zhaw/fakereader/api/
-│   │   │   ├── DjlApiApplication.java
-│   │   │   ├── ModelController.java
-│   │   │   └── ModelService.java
-│   │   └── resources/static/index.html
+│   │   ├── main/
+│   │   │   ├── java/
+│   │   │   │   └── ch/zhaw/fakereader/api/
+│   │   │   │       ├── DjlApiApplication.java
+│   │   │   │       ├── ModelController.java
+│   │   │   │       └── ModelService.java
+│   │   │   └── resources/
+│   │   │       └── static/
+│   │   │           └── index.html
 │   └── pom.xml
 ├── djl-model/
 │   ├── dataset/
 │   ├── models/
-│   ├── src/main/java/ch/zhaw/fakereader/
-│   │   ├── Main.java
-│   │   ├── Models.java
-│   │   └── Evaluate.java
+│   ├── src/
+│   │   └── main/
+│   │       └── java/
+│   │           └── ch/zhaw/fakereader/
+│   │               ├── Main.java
+│   │               ├── Models.java
+│   │               └── Evaluate.java
 ├── Dockerfile
 ├── README.md
 └── streamlit_app.py (nicht verwendet)
+
 
 ## 🎬 Screencast-Inhalt (5 Minuten)
 
