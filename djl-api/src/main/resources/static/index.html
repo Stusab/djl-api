@@ -69,13 +69,14 @@
 
       try {
         const data = await res.json();
-        if (data.className && data.probability !== undefined) {
+        if (Array.isArray(data)) {
+          const top = data.reduce((a, b) => a.probability > b.probability ? a : b);
           resultElem.textContent =
-            `🌿 Ergebnis: ${data.className}\n📊 Wahrscheinlichkeit: ${(data.probability * 100).toFixed(2)}%`;
+            `🌿 Ergebnis: ${top.className}\n📊 Wahrscheinlichkeit: ${(top.probability).toFixed(2)}%`;
         } else {
           resultElem.textContent =
             `⚠️ Keine gültige Antwort erhalten.\nAntwort:\n${JSON.stringify(data, null, 2)}`;
-        }
+       }
       } catch (err) {
         resultElem.textContent = `❌ Fehler beim Verarbeiten der Serverantwort.`;
       }
