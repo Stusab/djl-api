@@ -1,66 +1,75 @@
 # 🌿 DJL API: Pflanzenerkennung (Toxic vs. Non-Toxic)
 
-Dieses Projekt wurde im Rahmen des Moduls **Model Deployment & Maintenance** erstellt. Es nutzt die **Deep Java Library (DJL)** in Kombination mit einem **Spring Boot Webservice**, um Pflanzenbilder als **giftig** oder **ungiftig** zu klassifizieren.
-Diese Projekt unterscheidet sich von meinem Projekt 1, da im ersten Projekt es um Heilpflanzen ging und ihre Wahrscheinlichkeit bei Krankheiten zu helfen, hier wir klassifiziert ob die Pflanze giftig ist oder nicht.
-
----
+Dieses Projekt wurde im Rahmen des Moduls Model Deployment & Maintenance erstellt. Es kombiniert ein lokal trainiertes Deep-Learning-Modell (basierend auf DJL) mit einem Spring Boot Backend, einer Web-UI und einem Docker-basierten Deployment auf Render.com. Das Ziel ist es, Pflanzenbilder automatisiert als giftig oder ungiftig zu klassifizieren.
 
 ## 📦 Tech-Stack
 
-- Java / Spring Boot
+- Java 17 / Spring Boot
 - Deep Java Library (DJL) mit MXNet Engine
-- Docker für Containerisierung
-- HTML/JavaScript für Web-Oberfläche
-- Curl / Postman für API-Tests
-- (Optional) Azure Web App Deployment
+- HTML / JavaScript für UI
+- Maven & Docker
+- Render.com (Deployment)
+- GitHub (Versionierung)
 
----
+## 🧠 Modelltraining
 
-## 🔍 Projektübersicht
+Das Modell basiert auf einem ResNet-18 (über DJL basicmodelzoo).  
+Das Training erfolgte lokal mit einem eigenen Datensatz aus ca. 1000 Bildern pro Klasse (toxic, nontoxic).
 
-Ein vortrainiertes Deep-Learning-Modell wird in eine REST-API eingebettet. Nutzer:innen können ein Pflanzenbild hochladen, das analysiert und klassifiziert wird. Die Ergebnisse sind sowohl über eine JSON-Antwort als auch über eine einfache Web-Oberfläche einsehbar.
+Trainingsablauf:
+- Main.java: Startet das Training mit DJL und speichert Checkpoints unter /models/plantdetector
+- Models.java: Definiert das ResNet-18 Modell mit festen Bilddimensionen (224×224, 3 Kanäle)
+- Evaluate.java: Prüft Genauigkeit und erzeugt eine Confusion-Matrix für das Validierungsset
 
----
+Trainingsdatenstruktur:
 
-## 🧠 Modell-Details
+dataset/
+├── train/
+│   ├── toxic/
+│   └── nontoxic/
+├── valid/
+    ├── toxic/
+    └── nontoxic/
 
-- **Modelltyp**: Image Classification (Binary: toxic / non-toxic)
-- **Bibliothek**: Deep Java Library (DJL)
-- **Engine**: MXNet
-- **Trainingsdaten**: Vorgefertigter, lokal gespeicherter Datensatz mit ca. 1000 Bildern je Klasse
-- **Training**: Lokal durchgeführt, Modell im Projekt gespeichert unter:  
-  src/main/resources/models/plantdetector/
-- **Einsatz**: Modell wird beim Start des Webservices geladen
+Trainiert wurde mit EasyTrain.fit, 10 Epochen, Learning Rate 0.001, Batch-Größe 32.  
+Das Modell wird automatisch beim Start des Backends geladen.
 
----
+## 🔍 Anwendung & Ablauf
+
+1. Nutzer lädt ein Bild auf der Web-Oberfläche hoch  
+2. Das Bild wird per POST /api/analyze an das Backend gesendet  
+3. Das Modell klassifiziert das Bild lokal auf dem Server  
+4. Die JSON-Antwort enthält className und probability  
+5. Die UI zeigt die Resultate visuell formatiert an
 
 ## 🔗 REST API
 
-**POST /api/analyze**
+POST /api/analyze
 
-- **Beschreibung**: Klassifiziert ein übermitteltes Bild
-- **Content-Type**: multipart/form-data  
-- **Form-Feld**: image  
-- **Antwortformat (Beispiel)**:  
-  { "className": "toxic", "probability": 0.9458 }
+- Content-Type: multipart/form-data
+- Form-Feld: image
 
-https://djl-api.onrender.com/  
+Beispielantwort:
 
+{
+  "className": "toxic",
+  "probability": 0.9458
+}
 
----
+## 💻 Benutzeroberfläche (UI)
 
-## 💻 Web UI
+Die HTML/JavaScript-Webseite (index.html) befindet sich unter:
 
-Eine einfache HTML/JavaScript-Seite unter:  
-src/main/resources/static/index.html  
-ermöglicht den Upload von Bildern über den Browser. Die Klassifikation wird direkt auf der Seite angezeigt.
+src/main/resources/static/index.html
 
----
+- intuitives Hochladen von Bildern
+- direkte Anzeige von Klassifikation + Wahrscheinlichkeit
+- modernisiert mit Icons und Formatierung
+
+Live-Demo:  
+https://djl-api.onrender.com
 
 ## 🐳 Docker Deployment
-
-**Dockerfile**  
-Ein lauffähiger Dockerfile ist enthalten. So kann der Service gestartet werden:
 
 Image bauen:  
 docker build -t djl-api .
@@ -68,65 +77,61 @@ docker build -t djl-api .
 Container starten:  
 docker run -p 8080:8080 djl-api
 
-**Optional: Docker Compose**  
-Falls mehrere Container benötigt werden, kann eine docker-compose.yml ergänzt werden.
+Das Backend lädt beim Start automatisch das Modell aus /resources/models/plantdetector.
 
----
+## ☁️ Deployment auf Render
 
-## ☁️ Azure Deployment (Optional)
-
-Das Projekt kann auf Azure Web App deployed werden.  
-Der Screencast dokumentiert:
-- Start der App mit Modell-Laden
-- Test via Postman oder UI
-- Screenshot oder Video der Azure-Instanz
-
----
+- Docker-Webservice
+- Öffentliche URL erreichbar
+- Modell wird beim Start geladen
+- Logs und Status einsehbar im Render-Dashboard
 
 ## 🧾 Projektstruktur
 
-src/  
-├── main/  
-│   ├── java/  
-│   │   └── com.example.djlapi/  ← Spring Boot Backend mit DJL  
-│   ├── resources/  
-│   │   ├── static/index.html    ← Web UI  
-│   │   └── models/plantdetector/ ← Trainiertes Modell  
+Projekt2/
+├── djl-api/
+│   ├── src/
+│   │   ├── main/java/ch/zhaw/fakereader/api/
+│   │   │   ├── DjlApiApplication.java
+│   │   │   ├── ModelController.java
+│   │   │   └── ModelService.java
+│   │   └── resources/static/index.html
+│   └── pom.xml
+├── djl-model/
+│   ├── dataset/
+│   ├── models/
+│   ├── src/main/java/ch/zhaw/fakereader/
+│   │   ├── Main.java
+│   │   ├── Models.java
+│   │   └── Evaluate.java
+├── Dockerfile
+├── README.md
+└── streamlit_app.py (nicht verwendet)
 
-Weitere Dateien:  
-- Dockerfile  
-- pom.xml  
-- README.md
+## 🎬 Screencast-Inhalt (5 Minuten)
 
----
-
-## 🎬 Screencast-Inhalt
-
-- Start des Servers mit sichtbarem Modell-Load
-- Curl- oder Postman-Test
-- Web-UI-Demo
-- Optional: Stremlit Deployment
-- Erklärung der Ordnerstruktur und Highlights
-
----
+- Projekt- & Dateistruktur
+- Deployment auf Render.com
+- Analyse eines Bilds über die Web-UI
+- Erklärung API-Aufruf
+- Darstellung des Trainings: Datensatz, Modellarchitektur, Evaluierung
+- Ergebnisdarstellung mit visueller UI
 
 ## ✅ Bewertungskriterien (Selbstcheck)
 
 | Kriterium                            | Erfüllt |
 |-------------------------------------|---------|
-| Komplexes Modell & Dataset          | ✅       |
-| Eigenständige Umsetzung             | ✅       |
-| Backend mit DJL                     | ✅       |
-| UI mit Funktion                     | ✅       |
-| Deployment lokal / Azure            | ✅       |
-| Docker (evtl. Compose)              | ✅       |
-| Dokumentation & Screencast          | ✅       |
+| Eigenständige Daten & Modell        | ✅       |
+| Training & Evaluierung dokumentiert | ✅       |
+| Funktionierendes Backend/API        | ✅       |
+| UI vollständig integriert           | ✅       |
+| Deployment öffentlich zugänglich    | ✅       |
+| Docker / CI optional                | ✅       |
+| Screencast in Hochdeutsch           | ✅       |
 
----
+## 👤 Autorin
 
-## 👤 Autor
-
-**Name**: Sabrina Studer
-**Modul**: Model Deployment & Maintenance  
-**Studiengang**: Wirtschaftsinformatik  
-**Semester**: FS2025
+Name: Sabrina Studer  
+Modul: Model Deployment & Maintenance  
+Studiengang: Wirtschaftsinformatik  
+Semester: FS2025
