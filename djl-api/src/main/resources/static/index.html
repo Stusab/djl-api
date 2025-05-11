@@ -3,12 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <title>Pflanzen-Toxizität prüfen</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+
+    #fileInput {
+      padding: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    #analyzeBtn {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    #analyzeBtn:hover {
+      background-color: #1e8449;
+    }
+
+    #result {
+      background: #ecf0f1;
+      border: 1px solid #bdc3c7;
+      padding: 15px;
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+      white-space: pre-wrap;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Toxische vs. ungiftige Pflanzen</h1>
+  <h1>🌿 Pflanzen-Toxizität analysieren</h1>
   <input type="file" id="fileInput" accept="image/*">
   <button id="analyzeBtn">Analysieren</button>
-  <pre id="result"></pre>
+  <pre id="result">Ergebnis wird hier angezeigt...</pre>
 
   <script>
     document.getElementById('analyzeBtn').onclick = async () => {
@@ -17,7 +69,13 @@
       const form = new FormData();
       form.append('image', file);
       const res = await fetch('/api/analyze', { method: 'POST', body: form });
-      document.getElementById('result').textContent = JSON.stringify(await res.json(), null, 2);
+      const resultElem = document.getElementById('result');
+      if (res.ok) {
+        const data = await res.json();
+        resultElem.textContent = `🌱 Ergebnis: ${data.className}\n📊 Wahrscheinlichkeit: ${(data.probability * 100).toFixed(2)}%`;
+      } else {
+        resultElem.textContent = '❌ Fehler beim Analysieren. Bitte erneut versuchen.';
+      }
     };
   </script>
 </body>
