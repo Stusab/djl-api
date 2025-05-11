@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
-API_URL = st.secrets["API_URL"]
+API_URL = https://djl-api.onrender.com
+
 # Seite konfigurieren
 st.set_page_config(
     page_title="🌿 Pflanzen-Toxizität analysieren",
