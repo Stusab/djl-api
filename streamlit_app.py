@@ -19,7 +19,7 @@ uploaded_file = st.file_uploader("Bitte ein Pflanzenbild hochladen:", type=["jpg
 if uploaded_file:
     with st.spinner("🔍 Analyse läuft..."):
         try:
-            files = {"image": uploaded_file.getvalue()}
+            files = {"image": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
             response = requests.post(f"{st.secrets['API_URL']}/api/analyze", files={"file": uploaded_file})
             if response.ok:
                 result = response.json()
